@@ -1,0 +1,12 @@
+--// Roblox Chat Script
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+
+-- Wait until the player is fully loaded
+repeat task.wait() until player and player:FindFirstChild("PlayerGui")
+
+-- Send chat message
+game.ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(
+    "haha ah ckhout anh bork sos",
+    "All"
+)
