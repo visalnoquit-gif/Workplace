@@ -3,7 +3,6 @@ local TweenService = game:GetService("TweenService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
--- Create ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = playerGui
 
@@ -29,29 +28,34 @@ local function createButton(text)
     btn.BackgroundColor3 = Color3.fromRGB(255,100,100)
     btn.TextScaled = true
     btn.Parent = screenGui
-    makeFloat(btn)
     return btn
 end
 
--- Create buttons
-local button1 = createButton("joch anh mk ah ckhout")
-local button2 = createButton("joch anh oy Klang tik mk")
-button2.Visible = false
-local button3 = createButton("joch doch ach")
-button3.Visible = false
+-- Create buttons but hide all initially
+local buttons = {
+    createButton("joch anh mk ah ckhout"),
+    createButton("joch anh oy Klang tik mk"),
+    createButton("joch doch ach")
+}
+for i, btn in ipairs(buttons) do
+    btn.Visible = false
+end
 
--- Chain clicks with disappearing
-button1.MouseButton1Click:Connect(function()
-    button1.Visible = false
-    button2.Visible = true
-end)
+-- Function to show button i and handle click
+local function showButton(i)
+    local btn = buttons[i]
+    if not btn then return end
+    btn.Visible = true
+    makeFloat(btn)
+    btn.MouseButton1Click:Connect(function()
+        btn.Visible = false
+        if i < #buttons then
+            showButton(i + 1)
+        else
+            player:Kick("haha ah ckhout")
+        end
+    end)
+end
 
-button2.MouseButton1Click:Connect(function()
-    button2.Visible = false
-    button3.Visible = true
-end)
-
-button3.MouseButton1Click:Connect(function()
-    button3.Visible = false
-    player:Kick("haha ah ckhout")
-end)
+-- Start the sequence
+showButton(1)
