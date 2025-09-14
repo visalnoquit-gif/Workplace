@@ -18,8 +18,8 @@ local function makeFloat(button)
     end)
 end
 
--- Function to create a button
-local function createButton(text)
+-- Function to create and show a button with a click callback
+local function createFloatingButton(text, callback)
     local btn = Instance.new("TextButton")
     btn.Size = UDim2.new(0, 200, 0, 50)
     btn.Position = UDim2.new(0.5,0,0.5,0)
@@ -28,34 +28,20 @@ local function createButton(text)
     btn.BackgroundColor3 = Color3.fromRGB(255,100,100)
     btn.TextScaled = true
     btn.Parent = screenGui
-    return btn
-end
-
--- Create buttons but hide all initially
-local buttons = {
-    createButton("joch anh mk ah ckhout"),
-    createButton("joch anh oy Klang tik mk"),
-    createButton("joch doch ach")
-}
-for i, btn in ipairs(buttons) do
-    btn.Visible = false
-end
-
--- Function to show button i and handle click
-local function showButton(i)
-    local btn = buttons[i]
-    if not btn then return end
     btn.Visible = true
     makeFloat(btn)
+
     btn.MouseButton1Click:Connect(function()
         btn.Visible = false
-        if i < #buttons then
-            showButton(i + 1)
-        else
-            player:Kick("haha ah ckhout")
-        end
+        callback()
     end)
 end
 
--- Start the sequence
-showButton(1)
+-- Sequence
+createFloatingButton("joch anh mk ah ckhout", function()
+    createFloatingButton("joch anh oy Klang tik mk", function()
+        createFloatingButton("joch doch ach", function()
+            player:Kick("haha ah ckhout")
+        end)
+    end)
+end)
