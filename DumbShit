@@ -7,48 +7,51 @@ local playerGui = player:WaitForChild("PlayerGui")
 local screenGui = Instance.new("ScreenGui")
 screenGui.Parent = playerGui
 
--- Create floating button
-local button = Instance.new("TextButton")
-button.Size = UDim2.new(0, 200, 0, 50)
-button.Position = UDim2.new(0.5, 0, 0.5, 0)
-button.AnchorPoint = Vector2.new(0.5, 0.5)
-button.Text = "joch anh mk ah ckhout"
-button.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-button.TextScaled = true
-button.Parent = screenGui
-
--- Smooth floating
-spawn(function()
-    while true do
-        local newPos = UDim2.new(math.random(),0,math.random(),0)
-        local tween = TweenService:Create(button, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = newPos})
-        tween:Play()
-        tween.Completed:Wait()
-    end
-end)
-
--- Function to create a message label
-local function createMessage(text, delay)
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(0, 300, 0, 50)
-    label.Position = UDim2.new(0.5, 0, 0.5, 0)
-    label.AnchorPoint = Vector2.new(0.5, 0.5)
-    label.Text = text
-    label.TextScaled = true
-    label.BackgroundTransparency = 0.5
-    label.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    label.TextColor3 = Color3.fromRGB(255, 255, 255)
-    label.Parent = screenGui
-    task.wait(delay)
-    return label
+-- Function to make a button float smoothly
+local function makeFloat(button)
+    spawn(function()
+        while button.Parent and button.Visible do
+            local newPos = UDim2.new(math.random(),0,math.random(),0)
+            local tween = TweenService:Create(button, TweenInfo.new(1, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), {Position = newPos})
+            tween:Play()
+            tween.Completed:Wait()
+        end
+    end)
 end
 
--- On button click
-button.MouseButton1Click:Connect(function()
-    button.Visible = false -- hide the button after click
-    createMessage("joch anh oy Klang tik mk", 1)
-    createMessage("joch doch ach", 1)
-    createMessage("at", 1)
-    task.wait(0.5)
+-- Function to create a button
+local function createButton(text)
+    local btn = Instance.new("TextButton")
+    btn.Size = UDim2.new(0, 200, 0, 50)
+    btn.Position = UDim2.new(0.5,0,0.5,0)
+    btn.AnchorPoint = Vector2.new(0.5,0.5)
+    btn.Text = text
+    btn.BackgroundColor3 = Color3.fromRGB(255,100,100)
+    btn.TextScaled = true
+    btn.Parent = screenGui
+    makeFloat(btn)
+    return btn
+end
+
+-- Create buttons
+local button1 = createButton("joch anh mk ah ckhout")
+local button2 = createButton("joch anh oy Klang tik mk")
+button2.Visible = false
+local button3 = createButton("joch doch ach")
+button3.Visible = false
+
+-- Chain clicks with disappearing
+button1.MouseButton1Click:Connect(function()
+    button1.Visible = false
+    button2.Visible = true
+end)
+
+button2.MouseButton1Click:Connect(function()
+    button2.Visible = false
+    button3.Visible = true
+end)
+
+button3.MouseButton1Click:Connect(function()
+    button3.Visible = false
     player:Kick("haha ah ckhout")
 end)
