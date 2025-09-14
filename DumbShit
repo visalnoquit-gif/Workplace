@@ -41,7 +41,7 @@ end
 createFloatingButton("joch anh mk ah ckhout", function()
     createFloatingButton("joch anh oy Klang tik mk", function()
         createFloatingButton("joch doch ach", function()
-            player:Kick("haha ah ckhout")
+            player:Kick("Ah Vi Ah Vicheka Ah Tay doch ach")
         end)
     end)
 end)
